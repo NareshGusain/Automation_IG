@@ -60,13 +60,13 @@ def add_part_number(video_path, part_number):
     clip = VideoFileClip(video_path)
 
     # Generate text clips
-    part_text = TextClip("Part -", fontsize=90, color='black', font="Lobster", method='caption')
+    part_text = TextClip("Part  ", fontsize=90, color='black', font="Lobster", method='caption')
     number_text = TextClip(f"{part_number}", fontsize=90, color='#CA0147', font="Lobster", method='caption')
 
     # Calculate exact positions
-    part_x = clip.w * 0.35  # "Part-" position (left-side)
-    number_x = part_x + part_text.w + 10  # Number placed just after "Part-"
-    y_position = clip.h - 350  # Adjust height for better placement
+    part_x = clip.w * 0.34  # "Part-" position (left-side)
+    number_x = part_x + part_text.w - 5  # Number placed just after "Part-"
+    y_position = clip.h - 600  # Adjust height for better placement
 
     part_text = part_text.set_position((part_x, y_position)).set_duration(clip.duration)
     number_text = number_text.set_position((number_x, y_position)).set_duration(clip.duration)
@@ -110,7 +110,7 @@ def upload_video():
     with open("captions.txt", "r") as f:
         captions = f.readlines()
 
-    caption = captions[part_number % len(captions)].strip() if captions else "🎬 Enjoy this clip! #uncutframesx"
+    caption = captions[part_number % len(captions)].strip() if captions else "🎬 Enjoy this clip! #uncutframesx #entertainment #fun"
 
     # Upload video
     print(f"🚀 Uploading {processed_video_path}...")
@@ -123,8 +123,10 @@ def upload_video():
             f.write(f"Part-{part_number}.mp4\n")
 
         # Delete original and processed video after upload
-        os.remove(video_path)
-        os.remove(processed_video_path)
+        if os.path.exists(video_path):
+            os.remove(video_path)
+        if os.path.exists(processed_video_path):
+            os.remove(processed_video_path)
         print(f"🗑 Deleted {video_file} after upload.")
 
     except Exception as e:
@@ -134,7 +136,7 @@ def upload_video():
 upload_video()
 
 # Schedule video uploads every 20 minutes
-schedule.every(1).minutes.do(upload_video)
+schedule.every(20).minutes.do(upload_video)
 
 print("🚀 Auto-upload system started...")
 
