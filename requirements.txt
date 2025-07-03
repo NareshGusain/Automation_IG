@@ -1,0 +1,4 @@
+instagrapi
+schedule
+pillow
+moviepy
